@@ -36,6 +36,15 @@ module.exports = {
       warnings: false,
       errors: true
     },
+    proxy: {
+      '/api': {
+        target: 'http://ihrm-java-itheima.net',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': ''
+        }
+      }
+    },
     before: require('./mock/mock-server.js')
   },
   configureWebpack: {

@@ -15,6 +15,10 @@ export function isExternal(path) {
  * @returns {Boolean}
  */
 export function validUsername(str) {
-  const valid_map = ['admin', 'editor']
+  const valid_map = ['admin', 'editor', 'liuyuyang']
   return valid_map.indexOf(str.trim()) >= 0
+}
+
+export function validMobile(str) {
+  return /^1[3-9]\d{9}$/.test(str) // 校验手机号
 }
