@@ -62,8 +62,8 @@
       >登录</el-button>
 
       <div class="tips">
-        <span style="margin-right: 20px">username: admin</span>
-        <span> password: any</span>
+        <span style="margin-right: 20px">username: 13800000002</span>
+        <span> password: 123456</span>
       </div>
     </el-form>
   </div>
@@ -72,19 +72,10 @@
 <script>
 // import { validUsername } from '@/utils/validate'
 import { validMobile } from '@/utils/validate'
-import axios from 'axios'
 
 export default {
   name: 'Login',
   data() {
-    // const validateUsername = (rule, value, callback) => {
-    //   if (!validUsername(value)) {
-    //     callback(new Error('请输入正确的用户名'))
-    //   } else {
-    //     callback()
-    //   }
-    // }
-
     const validdataMobile = (rule, value, callback) => {
       if (validMobile(value) && value.length === 11) {
         callback()
@@ -102,7 +93,7 @@ export default {
     }
     return {
       loginForm: {
-        mobile: '177888888888',
+        mobile: '13800000002',
         password: '123456'
       },
       loginRules: {
@@ -130,11 +121,6 @@ export default {
       immediate: true
     }
   },
-  created() {
-    axios.post('/sys/login', this.loginForm).then(res => {
-      console.log(res)
-    })
-  },
   methods: {
     showPwd() {
       if (this.passwordType === 'password') {
@@ -148,27 +134,11 @@ export default {
     },
     // 登录按钮
     handleLogin() {
-      // this.$refs.loginForm.validate((valid) => {
-      //   if (valid) {
-      //     this.loading = true
-      //     this.$store
-      //       .dispatch('user/login', this.loginForm)
-      //       .then(() => {
-      //         this.$router.push({ path: this.redirect || '/' })
-      //         this.loading = false
-      //       })
-      //       .catch(() => {
-      //         this.loading = false
-      //       })
-      //   } else {
-      //     console.log('error submit!!')
-      //     return false
-      //   }
-      // })
-      console.log(this)
-      // this.$refs.loginForm.validate((valid) => {
-
-      // })
+      this.$refs.loginForm.validate(async value => {
+        if (value) {
+          this.$store.dispatch('user/loginActions', { loginForm: this.loginForm, that: this })
+        }
+      })
     }
   }
 }
