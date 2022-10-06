@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        const arr = ['HTML','CSS','JavaScript','Vue','React','Nodejs']
+        // 查找arr数组中是否包含Vue
+        console.log(arr.includes('Vue')); //true
+        console.log(arr.includes('Element Ui')); //false
+
+        // 他的第二个参数决定从哪个位置开始查找，索引从0开始，第二个刚好在数组中的CSS之后，所以查询不到返回false
+        console.log(arr.includes('CSS',2)); //false
+
+        // 如果让他从索引1开始查找，就可以找到。
+        console.log(arr.includes('CSS',1)); //true
+
+        // 还有一种方式也可以实现与includes同样的功能
+        console.log(arr.indexOf('Vue') > -1)
+        console.log(arr.indexOf('Element Ui') > -1)
+    </script>
+</body>
+</html>

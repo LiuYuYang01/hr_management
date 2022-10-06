@@ -72,6 +72,7 @@
 <script>
 // import { validUsername } from '@/utils/validate'
 import { validMobile } from '@/utils/validate'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'Login',
@@ -122,6 +123,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['user/loginActions']),
     showPwd() {
       if (this.passwordType === 'password') {
         this.passwordType = ''
@@ -134,9 +136,18 @@ export default {
     },
     // 登录按钮
     handleLogin() {
-      this.$refs.loginForm.validate(async value => {
+      this.$refs.loginForm.validate(async(value) => {
         if (value) {
-          this.$store.dispatch('user/loginActions', { loginForm: this.loginForm, that: this })
+          // 写法一
+          // await this.$store.dispatch('user/loginActions', {
+          //   loginForm: this.loginForm,
+          //   that: this
+          // })
+
+          // 写法二
+          await this['user/loginActions']({ loginForm: this.loginForm, that: this })
+
+          this.$router.push('/')
         }
       })
     }
