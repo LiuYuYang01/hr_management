@@ -99,9 +99,9 @@ export default {
       },
       loginRules: {
         mobile: [
-          // 用户名为空则执行
+          // 用户名为空时触发
           { required: true, message: '用户名不能为空' },
-          // 失去焦点则执行自定义校验函数：validdataMobile
+          // 失去焦点则触发自定义校验函数：validdataMobile
           { trigger: 'blur', validator: validdataMobile }
         ],
         password: [

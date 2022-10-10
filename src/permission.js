@@ -4,7 +4,7 @@ import store from '@/store'
 import nprogress from 'nprogress'
 import 'nprogress/nprogress.css'
 
-router.beforeEach((to, form, next) => {
+router.beforeEach(async(to, form, next) => {
   // 页面切换前 开启进度条
   nprogress.start()
 
@@ -17,6 +17,11 @@ router.beforeEach((to, form, next) => {
     if (to.path === '/login') {
       next('/')
     } else {
+      if (!store.getters.userId) {
+        // 如果没有id这个值 才会调用 vuex的获取资料的action
+        await store.dispatch('user/getUserInfo')
+        // 为什么要写await 因为我们想获取完资料再去放行
+      }
       next()
     }
   } else {

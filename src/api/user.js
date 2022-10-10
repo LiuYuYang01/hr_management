@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 登录
+// 封装登录API
 export function loginAPI(data) {
   return request({
     url: '/sys/login',
@@ -9,12 +9,17 @@ export function loginAPI(data) {
   })
 }
 
-// 获取信息
-export function getInfo(token) {
-
+// 封装获取用户信息API
+export function getUserInfoAPI() {
+  return request({
+    url: '/sys/profile',
+    method: 'POST'
+  })
 }
 
-// 退出登录
-export function logout() {
-
+// 获取用户头像
+export function getUserDetailById(id) {
+  return request({
+    url: `/sys/user/${id}`
+  })
 }
