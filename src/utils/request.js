@@ -3,7 +3,7 @@ import store from '@/store'
 import router from '@/router'
 import { getTimeStamp } from '@/utils/auth'
 // Token到期时间 以秒为单位
-const TimeOut = 60 // 一分钟后到期
+const TimeOut = 60 * 60 * 24 // 一小时后到期
 
 // 创建axios实例对象
 const service = axios.create({
@@ -16,7 +16,7 @@ const service = axios.create({
 // 请求拦截
 service.interceptors.request.use(
   (config) => {
-    // 在这个位置需要统一的去注入token
+    // 每次前端请求后端接口都需要携带token会比较麻烦，所以在这个位置需要统一的去注入token
     if (store.getters.token) {
       // 在有token的情况下 才有必要去检查时间戳是否超时
       if (IsCheckTimeOut()) {

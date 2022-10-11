@@ -17,10 +17,11 @@ router.beforeEach(async(to, form, next) => {
     if (to.path === '/login') {
       next('/')
     } else {
+      // 没有用户信息就获取，用户信息了就没有必要再获取一遍
       if (!store.getters.userId) {
-        // 如果没有id这个值 才会调用 vuex的获取资料的action
+        // 没有id这个值 才会调用 vuex的获取资料的action
         await store.dispatch('user/getUserInfo')
-        // 为什么要写await 因为我们想获取完资料再去放行
+        // 这里写await 是因为需要获取完资料再next放行
       }
       next()
     }

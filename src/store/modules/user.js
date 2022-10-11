@@ -17,16 +17,16 @@ export default {
       // 将token持久化存储到Cookies
       setToken(token)
     },
-    // 更新用户信息
+    // 用户信息
     setUserInfo(state, payload) {
       state.userInfo = payload
     },
     // 清除用户信息
-    removeUserInfo(state, payload) {
+    removeUserInfo(state) {
       state.userInfo = {}
     },
     // 清除token
-    removeToken(state, payload) {
+    removeToken(state) {
       state.token = ''
     }
   },
