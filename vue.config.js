@@ -40,7 +40,7 @@ module.exports = {
       // 这里 /api 等同于 http://ihrm-java.itheima.net
       '/api': {
         // 接口地址
-        target: 'http://ihrm-java.itheima.net',
+        target: 'http://ihrm.itheima.net',
         // 是否开启跨域
         changeOrigin: true
         // 路径重写

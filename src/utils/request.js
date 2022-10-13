@@ -3,7 +3,7 @@ import store from '@/store'
 import router from '@/router'
 import { getTimeStamp } from '@/utils/auth'
 // Token到期时间 以秒为单位
-const TimeOut = 60 * 60 * 24 // 一小时后到期
+const TimeOut = 60 * 60 * 9999 // 一天后到期
 
 // 创建axios实例对象
 const service = axios.create({
