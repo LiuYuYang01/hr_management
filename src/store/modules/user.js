@@ -52,6 +52,7 @@ export default {
         payload.that.$message.error(err)
       } finally {
         // 不论执行try 还是catch  都会停止加载状态
+        // eslint-disable-next-line require-atomic-updates
         payload.that.loading = false
       }
     },

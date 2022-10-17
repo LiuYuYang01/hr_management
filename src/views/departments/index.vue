@@ -1,23 +1,39 @@
 <template>
-  <div class="dashboard-container">
+  <div v-loading="loading" class="dashboard-container">
     <div class="app-container">
       <el-card class="tree-card">
         <!-- 用了一个行列布局 -->
-        <treeTools :tree-node="company" :is-root="true" />
+        <treeTools
+          :tree-node="company"
+          :is-root="true"
+          @addDepartments="addDepartments"
+        />
 
         <!-- Tree 树形控件 -->
-        <!-- 默认是否展开：default-expand-all -->
-        <el-tree :data="departs" :props="defaultProps" default-expand-all>
+        <!-- 默认是否展开：:default-expand-all="true"  为true默认展开 反之默认收起 -->
+        <el-tree
+          :data="departs"
+          :props="defaultProps"
+          :default-expand-all="true"
+        >
           <treeTools
             slot-scope="{ data }"
             :tree-node="data"
             @delDepts="getDepartments"
             @addDepartments="addDepartments"
+            @update="updateDepartments"
           />
         </el-tree>
       </el-card>
 
-      <addDept title="新增部门" :visible="showDialog" />
+      <addDept
+        ref="updateTools"
+        title="新增部门"
+        :visible="showDialog"
+        :tree-node="treeNode"
+        :show-dialog.sync="showDialog"
+        @addDepts="getDepartments"
+      />
     </div>
   </div>
 </template>
@@ -31,10 +47,8 @@ export default {
   components: { treeTools, addDept },
   data() {
     return {
-      company: {
-        name: '江苏传智播客教育科技股份有限公司',
-        manager: '负责人'
-      },
+      loading: false,
+      company: {},
       defaultProps: {
         // 指定二级分类名称
         children: 'children',
@@ -42,22 +56,38 @@ export default {
         label: 'name'
       },
       departs: [],
-      showDialog: false
+      showDialog: false,
+      treeNode: {}
     }
   },
   created() {
     this.getDepartments()
   },
   methods: {
+    // 获取部门数据
     async getDepartments() {
-      const res = await getDepartments()
-      // this.departs = res.data.depts
-      this.departs = tranListToTreeData(res.data.depts, '')
-      console.log(res)
+      this.loading = true
+
+      const { data: { depts }} = await getDepartments()
+      this.departs = tranListToTreeData(depts, '')
+      this.company = {
+        name: '江苏传智播客教育科技股份有限公司',
+        manager: '负责人',
+        id: ''
+      }
+
+      this.loading = false
+      console.log(depts)
     },
+    // 添加部门
     addDepartments(data) {
       this.showDialog = true
-      console.log(data)
+      this.treeNode = data
+    },
+    // 修改部门
+    updateDepartments(data) {
+      this.showDialog = true
+      this.$refs.updateTools.getDepartDetail(data.id)
     }
   }
 }

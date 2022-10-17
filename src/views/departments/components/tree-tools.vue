@@ -50,13 +50,13 @@ export default {
   },
   methods: {
     opterDepts(type) {
-      console.log(type)
       // 添加
       if (type === 'add') {
         this.$emit('addDepartments', this.treeNode)
       }
       // 编辑
       else if (type === 'emit') {
+        this.$emit('update', this.treeNode)
       } // 删除
       else if (type === 'del') {
         this.$confirm('确定要删除吗？')

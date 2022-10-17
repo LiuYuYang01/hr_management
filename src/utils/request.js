@@ -2,6 +2,8 @@ import axios from 'axios'
 import store from '@/store'
 import router from '@/router'
 import { getTimeStamp } from '@/utils/auth'
+// import { Message } from 'element-ui'
+
 // Token到期时间 以秒为单位
 const TimeOut = 60 * 60 * 9999 // 一天后到期
 
