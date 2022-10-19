@@ -17,6 +17,8 @@ import '@/permission' // 权限控制
 
 import { imageError } from '@/directives/index'
 
+import pageTool from '@/components/index'
+
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
@@ -36,6 +38,9 @@ Vue.directive('image', imageError)
 Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明
 // Vue.use(ElementUI)
+
+// 全局注册pageTool组件
+Vue.use(pageTool)
 
 Vue.config.productionTip = false
 

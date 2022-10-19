@@ -5,7 +5,7 @@ import { getTimeStamp } from '@/utils/auth'
 // import { Message } from 'element-ui'
 
 // Token到期时间 以秒为单位
-const TimeOut = 60 * 60 * 9999 // 一天后到期
+const TimeOut = 60 * 60 * 24 * 9999 // 一天后到期
 
 // 创建axios实例对象
 const service = axios.create({
@@ -35,6 +35,7 @@ service.interceptors.request.use(
     return config // 必须返回配置
   },
   (error) => {
+    console.log(error, 11111111)
     return Promise.reject(error)
   }
 )

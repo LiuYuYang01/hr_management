@@ -80,11 +80,19 @@ export default {
         data: { depts }
       } = await getDepartments()
 
-      // 获取指定部门下面的所有部门
-      const department = depts.filter((item) => item.pid === this.treeNode.id)
+      let isRepeat = false
 
-      // 查找指定部门中有没有准备添加的部门
-      const isRepeat = department.some((item) => item.name === value)
+      // 有id就代表编辑部门，没有就代表添加部门
+      if (this.formData.id) {
+        // 编辑 张三 => 校验规则 除了我之外 同级部门下 不能有叫张三的
+        isRepeat = depts.filter(item => item.pid === this.treeNode.pid && item.id !== this.treeNode.id).some(item => item.name === value)
+      } else {
+        // 获取指定部门下面的所有部门
+        const department = depts.filter((item) => item.pid === this.treeNode.id)
+
+        // 查找指定部门中有没有准备添加的部门
+        isRepeat = department.some((item) => item.name === value)
+      }
 
       // 如果存在就提示已存在，否则放行
       isRepeat
@@ -98,7 +106,12 @@ export default {
         data: { depts }
       } = await getDepartments()
 
-      const isRepeat = depts.filter((item) => item.pid === this.treeNode.id).some((item) => item.code === value && value)
+      let isRepeat = false
+      if (this.formData.id) {
+        isRepeat = depts.some(item => item.id !== this.formData.id && item.code === value && value)
+      } else {
+        isRepeat = depts.filter((item) => item.pid === this.treeNode.id).some((item) => item.code === value && value)
+      }
 
       isRepeat
         ? callback(new Error(`组织架构中已经有部门使用${value}编码`))
