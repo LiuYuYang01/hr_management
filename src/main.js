@@ -19,6 +19,8 @@ import { imageError } from '@/directives/index'
 
 import pageTool from '@/components/index'
 
+import * as filters from '@/filters/index'
+
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
@@ -41,6 +43,11 @@ Vue.use(ElementUI, { locale })
 
 // 全局注册pageTool组件
 Vue.use(pageTool)
+
+// 批量注册全局过滤器
+Object.keys(filters).forEach(key => {
+  Vue.filter(key, filters[key])
+})
 
 Vue.config.productionTip = false
 
