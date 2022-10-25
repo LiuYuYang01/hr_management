@@ -7,8 +7,8 @@
 
       <template v-slot:right>
         <el-row>
-          <el-button size="small" type="success">导入</el-button>
-          <el-button size="small" type="danger">导出</el-button>
+          <el-button size="small" type="success" @click="$router.push('/import')">Excel 导入</el-button>
+          <el-button size="small" type="danger" @click="exportEmp">Excel 导出</el-button>
           <el-button size="small" type="primary" @click="newEmployees">新增员工</el-button>
         </el-row>
       </template>
@@ -29,7 +29,7 @@
         <el-table-column label="账户状态" sortable="" prop="enableState" />
         <el-table-column label="操作" sortable="" fixed="right" width="280">
           <template slot-scope="{ row }">
-            <el-button type="text" size="small">查看</el-button>
+            <el-button type="text" size="small" @click="$router.push(`/employees/detail/${row.id}`)">查看</el-button>
             <el-button type="text" size="small">转正</el-button>
             <el-button type="text" size="small">调岗</el-button>
             <el-button type="text" size="small">离职</el-button>
@@ -44,7 +44,7 @@
       </el-row>
     </el-card>
 
-    <addEmployee :show-dialog="showDialog" />
+    <addEmployee :show-dialog.sync="showDialog" />
   </div>
 </template>
 
@@ -52,9 +52,9 @@
 // 格式化招聘形式
 import EmployeeEnum from '@/constant/employees'
 // 格式化时间
-import { getEmployeeList } from '@/api/employees'
-import { delEmployee } from '@/api/employees'
+import { getEmployeeList, delEmployee } from '@/api/employees'
 import addEmployee from './component/addEmployee'
+import { formatDate } from '@/filters/index'
 export default {
   components: { addEmployee },
   data() {
@@ -80,6 +80,7 @@ export default {
       const {
         data: { rows, total }
       } = await getEmployeeList(this.page)
+      console.log(rows)
 
       this.list = rows
       this.page.total = total
@@ -140,6 +141,64 @@ export default {
     // 新增员工
     newEmployees() {
       this.showDialog = true
+    },
+    // 导出员工
+    async exportEmp() {
+      // 表头
+      const headers = {
+        入职日期: 'timeOfEntry',
+        手机号: 'mobile',
+        姓名: 'username',
+        转正日期: 'correctionTime',
+        工号: 'workNumber',
+        聘用形式: 'formatEmployment',
+        部门: 'departmentName'
+      }
+
+      const {
+        data: { rows }
+      } = await getEmployeeList({ page: 1, size: this.page.total })
+      const data = this.formatJson(headers, rows)
+
+      import('@/vendor/Export2Excel').then((excel) => {
+        // const multiHeader = [['入职日期', '其他', '', '', '', '', '部门']]
+        // const merges = ['A1:A2', 'B1:F1', 'G1:G2']
+
+        excel.export_json_to_excel({
+          // 导出数据的表头
+          header: Object.keys(headers),
+          // 导出的具体数据
+          data,
+          // 导出的文件名
+          filename: '员工列表',
+          // 单元格自适应宽度
+          autoWidth: true,
+          // 导出文件类型
+          bookType: 'xlsx'
+          // multiHeader, merges
+        })
+      })
+    },
+    // 将对象转换为二维数组
+    formatJson(headers, rows) {
+      return rows.map((item) => {
+        // 获取所有键名
+        return Object.keys(headers).map((key) => {
+          if (
+            headers[key] === 'timeOfEntry' ||
+            headers[key] === 'correctionTime'
+          ) {
+            return formatDate(item[headers[key]])
+          } else if (headers[key] === 'formatEmployment') {
+            const en = EmployeeEnum.hireType.find(
+              (item) => item.id === item[headers[key]]
+            )
+            return en ? en.value : '未知'
+          }
+
+          return item[headers[key]]
+        })
+      })
     }
   }
 }

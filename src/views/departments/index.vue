@@ -3,37 +3,16 @@
     <div class="app-container">
       <el-card class="tree-card">
         <!-- 用了一个行列布局 -->
-        <treeTools
-          :tree-node="company"
-          :is-root="true"
-          @addDepartments="addDepartments"
-        />
+        <treeTools :tree-node="company" :is-root="true" @addDepartments="addDepartments" />
 
         <!-- Tree 树形控件 -->
         <!-- 默认是否展开：:default-expand-all="true"  为true默认展开 反之默认收起 -->
-        <el-tree
-          :data="departs"
-          :props="defaultProps"
-          :default-expand-all="true"
-        >
-          <treeTools
-            slot-scope="{ data }"
-            :tree-node="data"
-            @delDepts="getDepartments"
-            @addDepartments="addDepartments"
-            @update="updateDepartments"
-          />
+        <el-tree :data="departs" :props="defaultProps" :default-expand-all="true">
+          <treeTools slot-scope="{ data }" :tree-node="data" @delDepts="getDepartments" @addDepartments="addDepartments" @update="updateDepartments" />
         </el-tree>
       </el-card>
 
-      <addDept
-        ref="updateTools"
-        title="新增部门"
-        :visible="showDialog"
-        :tree-node="treeNode"
-        :show-dialog.sync="showDialog"
-        @addDepts="getDepartments"
-      />
+      <addDept ref="updateTools" title="新增部门" :visible="showDialog" :tree-node="treeNode" :show-dialog.sync="showDialog" @addDepts="getDepartments" />
     </div>
   </div>
 </template>
@@ -68,7 +47,9 @@ export default {
     async getDepartments() {
       this.loading = true
 
-      const { data: { depts }} = await getDepartments()
+      const {
+        data: { depts }
+      } = await getDepartments()
       this.departs = tranListToTreeData(depts, '')
       this.company = {
         name: '江苏传智播客教育科技股份有限公司',
